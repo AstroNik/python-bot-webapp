@@ -17,19 +17,25 @@ class Query(graphene.ObjectType):
 
 class CreateUser(graphene.Mutation):
     id = graphene.Int()
+    email = graphene.String()
+    password = graphene.String()
     first_name = graphene.String()
     last_name = graphene.String()
 
     class Arguments:
+        email = graphene.String()
+        password = graphene.String()
         first_name = graphene.String()
         last_name = graphene.String()
 
-    def mutate(self, info, first_name, last_name):
+    def mutate(self, info, email, password, first_name, last_name):
         user = User(first_name=first_name, last_name=last_name)
         user.save()
 
         return CreateUser(
             id=user.id,
+            email=user.email,
+            password=user.password,
             first_name=user.first_name,
             last_name=user.last_name,
         )
