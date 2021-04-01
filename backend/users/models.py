@@ -16,7 +16,7 @@ class User(models.Model):
 
 
 class Billing(models.Model):
-    uid = models.ForeignKey(User.uid, on_delete=models.SET_NULL=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL=True)
     card_number = models.CharField(max_length=16)
     card_holder = models.CharField(max_length=25)
     expiry = models.CharField(max_length=4)
@@ -28,7 +28,7 @@ class Billing(models.Model):
 
 
 class Purchases(models.Model):
-    uid = models.ForeignKey(User.uid, on_delete=models.SET_NULL=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL=True)
     item_purchased = models.CharField(max_length=100)
     price = models.DecimalField()
 
@@ -37,7 +37,7 @@ class Purchases(models.Model):
 
 
 class Bots(models.Model):
-    uid = models.ForeignKey(User.uid, on_delete=models.SET_NULL=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL=True)
     active_bots = models.IntegerField()
 
     def __str__(self):
@@ -62,7 +62,7 @@ class Amazon(models.Model):
 
 
 class Accounts(models.Model):
-    uid = models.ForeignKey(User.uid, on_delete=models.SET_NULL=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL=True)
     bestbuy = models.ForeignKey(BestBuy, on_delete=models.SET_NULL, null=True)
     amazon = models.ForeignKey(Amazon, on_delete=models.SET_NULL, null=True)
 
