@@ -12,9 +12,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+from datetime import timedelta
 
 env = environ.Env()
 environ.Env.read_env()
+
+dirname = os.path.dirname(__file__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -62,7 +65,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'frontend/build')
+            os.path.join(dirname, '../../frontend/build')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -90,7 +93,22 @@ DATABASES = {
 }
 
 GRAPHENE = {
-    'SCHEMA': 'users.schema.schema'
+    'SCHEMA': 'backend.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
+}
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+GRAPHQL_JWT = {
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': timedelta(days=30),  # use with csrf protection
+    # 'JWT_EXPIRATION_DELTA': timedelta(minutes=5),  # use with refresh token
+    'JWT_COOKIE_SAMESITE': 'Lax',
 }
 
 
@@ -136,6 +154,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/build/static')
+    os.path.join(dirname, '../../frontend/build/static')
 ]
